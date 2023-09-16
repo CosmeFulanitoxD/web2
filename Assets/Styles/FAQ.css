@@ -1,0 +1,42 @@
+.colomas{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: #E52600;
+    width: 500px;
+    height: 100%;
+    text-align: center;
+    color: white;
+}
+
+.colomas h3{
+    color: white;
+}
+
+.container1{
+    background-color: beige;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    width: 500px;
+}
+
+
+.letras{
+    top :0;
+    padding-left: 400px;
+    padding-right: 300px;
+}
+
+.colunas h5{
+    background-color: #f84926;
+    background-size: 200px;
+    font-size: 100px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.colunas h3{
+    background-color: #E52600;
+    background-size: 110px;
+    font-size: 20px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: white;
+    width: 300px;
+}
