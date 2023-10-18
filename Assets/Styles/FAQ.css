@@ -24,7 +24,7 @@
     padding-left: 400px;
     padding-right: 300px;
 }
-
+ 
 .colunas h5{
     background-color: #f84926;
     background-size: 200px;
@@ -39,4 +39,9 @@
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     color: white;
     width: 300px;
+}
+
+
+.table{
+    background-color: beige;
 }
