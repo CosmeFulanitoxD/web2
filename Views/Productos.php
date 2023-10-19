@@ -11,9 +11,27 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-        function editar(idMsj,Nombre){
-            document.getElementById('hddId').value = idMsj;
-            document.getElementById('txtstock').value =Nombre;
+        function editar(id_Producto,stock,Nombre,reorden,unidades,costo,url){
+            document.getElementById('hddId').value = id_Producto;           
+            document.getElementById('txtstock').value =stock;
+            document.getElementById('txtnombre').value =Nombre;
+            document.getElementById('txtreorden').value =reorden;
+            document.getElementById('txtunidades_c').value =unidades;
+            document.getElementById('txtcosto').value =costo;
+            document.getElementById('txturl').value =url;
+            console.log(id_Producto);
+        }
+
+        function editar2() {
+            var formData = $('#frmproducto').serialize();
+            $.ajax({
+                type:"POST",
+                url:"../Controladores/ctrlProd.php?opc=2",
+                data:formData,
+                success:function(data){
+                    $('#productos').html(data);
+                },
+            })
         }
 
         function Insertar(){
@@ -27,6 +45,16 @@
                 },
             })
         }
+        function eliminar(id) {
+      $.ajax({
+        type: "POST",        
+        url: "../Controladores/ctrlProd.php?opc=3",
+        data: {id_Producto:id},
+        success: function (data) {
+          $('#resAJAX').html(data);
+        },
+      })
+    }
     </script>
 </head>
 <body>
@@ -54,9 +82,9 @@
         <div class="prodcontainer">
             <h3>Productos</h3>
             <div id="resAJAX"></div>
-            <input type="hidden" id="hddId" name="hddId">
+           
             <form id="frmproducto" action="">
-                
+            <input type="hidden" id="hddId" name="hddId">
 
                     <div class="form-group">                      
                     <label for="txtstock">stock</label>
@@ -89,6 +117,7 @@
                 </div>
                 </input>
                 <button type="button" onclick="Insertar()" class="btn btn-info">Insertar</button>
+                <button type="button" onclick="editar2()" class="btn btn-warning">Update</button>
             </form>
 
             <table class="table">

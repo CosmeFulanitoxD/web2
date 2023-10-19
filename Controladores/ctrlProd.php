@@ -23,6 +23,16 @@ if (isset($_GET["opc"])) {
 
         case 2:
             $prodmod->updates();
+            echo getproductos($prodmod);
+            break;
+
+            case 3:
+                $id_Producto = $_POST['id_Producto'];
+                $prodmod->delete1($id_Producto);
+                echo '<h5 class="miclasecss"><strong>Respuesta a la peticion AJAX</strong></h5>';
+                echo $id_Producto;
+                break;
+
             break;
 
         case 4:
@@ -53,7 +63,8 @@ function getproductos($prodmod) {
         <td>'.$productos->fields[4].'</td>
         <td>'.$productos->fields[5].'</td>
         <td>'.$productos->fields[6].'</td>
-        <td><a href="#" class="btn btn-success" onclick="editar('.$productos->fields[0].',\''.$productos->fields[1].'\')">Editar</a></td>
+        <td><a href="#" class="btn btn-success" onclick="editar('.$productos->fields[0].',\''.$productos->fields[2].'\',\''.$productos->fields[1].'\',\''.$productos->fields[3].'\'
+        ,\''.$productos->fields[4].'\',\''.$productos->fields[5].'\',\''.$productos->fields[6].'\')">Editar</a></td>
         <td><input type="button" class="btn btn-danger" value="Eliminar" onclick="eliminar('.$productos->fields[0].')"></td>
     </tr>';
     $productos->moveNext();

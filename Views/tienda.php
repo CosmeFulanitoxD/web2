@@ -3,7 +3,7 @@ require '../Modelos/Database.php';
 require '../Modelos/config.php';
 $db = new Database();
 $con = $db->conectar();
-$token_tmp = null;
+# $token_tmp = null;
 
 
 $nombre = null;
@@ -40,17 +40,17 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link" href="./Index.html">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="../Index.html">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./aboutus.html">Contactus</a>
+              <a class="nav-link" href="../aboutus.html">Contactus</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./FAQ.html">About us</a>
+              <a class="nav-link" href="../FAQ.html">About us</a>
             </li>
 
             <a href="carro.php" class="btn btn-primary">
-                Carrito<span id="num_cart" class="badge bg-secondary"></span>
+                Carrito<span id="num_cart" class="badge bg-secondary"><?php echo $num_cart; ?></span>
             </a>
             
           </ul>
@@ -72,7 +72,8 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
                     <div class="d-flex justify-content-between align-items-center">
             
                       <a 
-                      href="" class="btn btn-sm btn-outline-secondary" onclick="Insertar(<?php  echo $row['nombre'] ?>,1,<?php echo $row['costo'] ?>,<?php echo $row['url'] ?>)" value="Add to cart" name="Add_to_cart">Añadir</a>
+                      href="altern.php?id=<?php echo $row['id_producto']; ?>&token=<?php echo hash_hmac('sha1',$row['id_producto'],KEY_TOKEN); ?>" class="btn btn-sm btn-outline-secondary"
+                       onclick="addProducto(<?php  echo $row['nombre'] ?>,1,<?php echo $row['costo'] ?>,<?php echo $row['url'] ?>)" value="Add to cart" name="Add_to_cart">Añadir</a>
                     
                       
                     
@@ -93,7 +94,6 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
             let formData =new FormData()
             formData.append('id', id)
             formData.append('token', token)
-
             fetch(url, {
                 method: 'POST',
                 body:formData,

@@ -1,4 +1,5 @@
 <?php 
+use SebastianBergmann\Environment\Console;
 class basemod
 {
     private $id_prod;
@@ -40,14 +41,20 @@ class basemod
     function updates(){
         $table = 'productos';
         $record = array();
+       # $record['id_producto'] = $_POST['hddId'];
         $record['stock'] = $_POST['txtstock'];
         $record['nombre'] = $_POST['txtnombre'];
         $record['reorden'] = $_POST['txtreorden'];
         $record['unidades'] = $_POST['txtunidades_c'];
         $record['costo'] = $_POST['txtcosto'];
         $record['url'] = $_POST['txturl'];
+        #print_r($_POST);
+        $this->db->autoExecute($table,$record,'UPDATE','id_producto = '.'\''.$_POST['hddId'].'\'');
+    }
 
-        $this->db->autoExecute($table,$record,'UPDATE','id_producto = '.'\''.$_POST['hddid'].'\'');
+    function delete1($id) {
+        $query = "DELETE FROM productos WHERE id_producto = ".$id;
+        $res = $this->db->Execute($query);
     }
 
     function getAllProducts(){

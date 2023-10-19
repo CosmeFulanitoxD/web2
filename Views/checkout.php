@@ -3,12 +3,26 @@ require '../Modelos/Database.php';
 require '../Modelos/config.php';
 $db = new Database();
 $con = $db->conectar();
-$token_tmp = null;
 
+$producto = isset($_SESSION['carrito']['productos']) ? $_SESSION['carrito']['productos'] :null;
+print_r($_SESSION);
+$lista_carrito = array();
+# $producto = ($_POST['carro']['productos']);
+#print_r($_POST);
+#echo $producto;
+#print_r($producto);
 
-$sql = $con->prepare("SELECT id_producto, costo, nombre, url FROM productos");
-$sql->execute();
-$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+if($producto != null){
+  foreach ($producto as $clave => $cantidad) {
+    echo "dsadasdasdasd          ";
+   
+    $sql = $con->prepare("SELECT id_producto, costo, nombre, url, $cantidad AS cantidad FROM productos WHERE id_producto=?");
+    $sql->execute([$clave]);
+    $lista_carrito[] = $sql->fetch(PDO::FETCH_ASSOC);
+    
+  }
+}
+
 
 
 ?>
@@ -21,7 +35,7 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="./Assets/Styles/Style.css">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-    <title>Tienda</title>
+    <title>checkout</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light ">
@@ -51,29 +65,41 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
       <main>
         <div class="container">
-         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <?php 
-            foreach ($resultado as $row ) { ?>
-                <div class="col">
-                 <div class="card shadow-sm">
-                  <img src= <?php echo $row['url'] ?> >
-      
-                  <div class="card-body">
-                  <h5 class="card-title"><?php echo $row['nombre'] ?></h5>
-                    <p class="card-text"><?php echo $row['costo'] ?></p>
-                    <div class="d-flex justify-content-between align-items-center">
-            
-                      <a href="carro.php?id=<?php echo $row['id_producto']; ?>&token=<?php
-                      $token_tmp =  hash_hmac('sha1',$row['id_producto'],KEY_TOKEN);
-                      echo $token_tmp; ?>" class="btn btn-sm btn-outline-secondary" onclick="addProducto(<?php echo $row['id_producto'] ?>,'<?php echo $token_tmp ?>')">Añadir</a>
-                    </div>
-                    <div>
-                  </div>
-                  </div> 
-            <?php }  ?>
-            
-         
-        </div>
+         <div class="table-response">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>nombre</th>
+                    <th>costo</th>
+                    <th>cantidad</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+                     if($lista_carrito == null){
+                      echo '<tr><td colspan="4" class="text-center"><b>Lista vacia</b></td></tr>';
+                     }else {
+                      $total = 0;
+                      foreach ($lista_carrito as $producto) {
+                        $id = $producto['id_producto'];
+                        $nombre = $producto['nombre'];
+                        $costo = $producto['costo'];
+                        $cantidad = $producto['cantidad']
+                     
+                  ?>
+                  <tr>
+                    <td><?php echo $nombre ?></td>
+                    <td><?php echo $costo ?></td>
+                    <td> <?php echo $cantidad ?> </td>
+                    <td> <a href="#" id="eliminar" class="btn btn-danger btn-sm" data-bs-id="<?php echo $id ?>"
+                     data-bs-toogle="modal" data-bs-target="eliminaModal">Eliminar</a></td>
+                  </tr>
+                  <?php }  ?>
+                </tbody>
+                <?php } ?>
+              </table>
+         </div>
         </div>
       </main>
 
