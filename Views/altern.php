@@ -64,13 +64,13 @@ if (($id == '' || $token = '')) {
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link" href="./Index.html">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="../Index.html">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./aboutus.html">Contactus</a>
+              <a class="nav-link" href="../aboutus.html">Contactus</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./FAQ.html">About us</a>
+              <a class="nav-link" href="../FAQ.html">About us</a>
             </li>
 
             <a href="checkout.php" class="btn btn-primary">

@@ -1,6 +1,7 @@
 <?php 
 require '../Modelos/Database.php';
 require '../Modelos/config.php';
+require '../Modelos/conexion.php';
 $db = new Database();
 $con = $db->conectar();
 
@@ -14,8 +15,7 @@ $lista_carrito = array();
 
 if($producto != null){
   foreach ($producto as $clave => $cantidad) {
-    echo "dsadasdasdasd          ";
-   
+    
     $sql = $con->prepare("SELECT id_producto, costo, nombre, url, $cantidad AS cantidad FROM productos WHERE id_producto=?");
     $sql->execute([$clave]);
     $lista_carrito[] = $sql->fetch(PDO::FETCH_ASSOC);
@@ -33,7 +33,11 @@ if($producto != null){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" href="./Assets/Styles/Style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="../Assets/Styles/FAQ.css">
+    <link rel="stylesheet" href="../Assets/Styles/Style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>checkout</title>
 </head>
@@ -46,13 +50,13 @@ if($producto != null){
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link" href="./Index.html">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="../Index.html">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./aboutus.html">Contactus</a>
+              <a class="nav-link" href="../aboutus.html">Contactus</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./FAQ.html">About us</a>
+              <a class="nav-link" href="../FAQ.html">About us</a>
             </li>
 
             <a href="carro.php" class="btn btn-primary">
@@ -72,6 +76,7 @@ if($producto != null){
                     <th>nombre</th>
                     <th>costo</th>
                     <th>cantidad</th>
+                    <th>Subtotal</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -85,30 +90,140 @@ if($producto != null){
                         $id = $producto['id_producto'];
                         $nombre = $producto['nombre'];
                         $costo = $producto['costo'];
-                        $cantidad = $producto['cantidad']
+                        $cantidad = $producto['cantidad'];
+                        
+                        $subtotal = $cantidad * $costo;
+                        $total += $subtotal;
                      
                   ?>
                   <tr>
                     <td><?php echo $nombre ?></td>
-                    <td><?php echo $costo ?></td>
-                    <td> <?php echo $cantidad ?> </td>
-                    <td> <a href="#" id="eliminar" class="btn btn-danger btn-sm" data-bs-id="<?php echo $id ?>"
-                     data-bs-toogle="modal" data-bs-target="eliminaModal">Eliminar</a></td>
+                    <td>$<?php echo $costo ?></td>
+                    <td> 
+                      <input type="number" min="1" max="10" step="1" value="<?php echo ($cantidad); ?>"
+                      size="5" id="cantidad_<?php echo $id; ?>" onchange="actualizacantidad(this.value, <?php echo $id; ?>)">                
+                    </td>
+
+                     <td>
+                      <div id="subtotal_<?php echo $id; ?>" name= "subtotal[]" >$<?php echo $subtotal; ?></div>
+                     </td>
+
+                    <td> <a id="eliminar" class="btn btn-danger btn-sm" onclick="eliminar(<?php echo $id; ?>)" data-id="<?php echo $id; ?>">Eliminar</a></td>
                   </tr>
                   <?php }  ?>
+                  <tr>
+                    <td colspan="3"></td></td>
+                    <td colspan="2">
+                      <p class="h3" id="total" >$<?php echo $total; ?></p>
+                    </td>
+                  </tr>
                 </tbody>
                 <?php } ?>
               </table>
          </div>
+         <div class="row">
+          <div col-md-5 offset-md-7 d-grid gap-2>
+            <button class="btn btn-primary btn-lg" onclick="comprar(<?php echo $id; ?>)">Realizar pago</button>
+          </div>
+         </div>
         </div>
+
+        <!-- empieza-->
+        <div class="prodcontainer">
+            <h3>Productos</h3>
+            <div id="resAJAX"></div>
+           
+            <form id="frmproducto" action="">
+            <input type="hidden" id="hddId" name="hddId">
+
+                    <div class="form-group">                      
+                    <label for="txtstock">stock</label>
+                    <input type="hidden" name="txtstock" id="txtstock">
+                </div>
+
+                <div class="form-group">                      
+                    <label for="txtnombre">nombre</label>
+                    <input type="hidden" name="txtnombre" id="txtnombre">
+                </div>
+
+                    <div class="form-group">                    
+                    <label for="txtreorden">reorden</label>
+                    <input type="hidden" name="txtreorden" id="txtreorden">
+                </div>
+
+                    <div class="form-group">   
+                    <label for="txtunidades_c">unidades</label>
+                    <input type="hidden" name="txtunidades_c" id="txtunidades_c">
+                </div>
+
+                    <div class="form-group">                       
+                    <label for="txtcosto">costo</label>
+                    <input type="hidden" name="txtcosto" id="txtcosto">
+                </div>
+
+                <div class="form-group">                       
+                    <label for="txturl">url</label>
+                    <input type="hidden" name="txturl" id="txturl">
+                </div>
+                </input>
+                
+            </form>
+
+            
+        </div>
+
       </main>
 
+      <!-- Modal -->
+      <div class="modal fade" id="eliminaModal" tabindex="-1" aria-labelledby="eliminaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eliminaModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
       <script>
-        function addProducto(id,token) {
-            let url = './carro.php'
+        
+        function eliminar(id) 
+{  
+    let url = 'actualizar_carro.php'
+    let formData = new FormData()
+    formData.append('action', 'eliminar')
+    formData.append('id', id)
+
+    fetch (url, 
+        {
+            method: 'POST',
+            body: formData,
+            mode: 'cors'
+        }).then(response => response.json())
+        .then(data => {
+                if (data.ok) 
+                {
+                    location.reload()
+                }
+            })
+}
+
+        function actualizacantidad(cantidad,id) {
+            let url = './actualizar_carro.php'
             let formData =new FormData()
+            formData.append('action','agregar')
             formData.append('id', id)
-            formData.append('token', token)
+            formData.append('cantidad', cantidad)
 
             fetch(url, {
                 method: 'POST',
@@ -117,8 +232,42 @@ if($producto != null){
             }).then(Response => Response.json())
             .then(data => {
                 if(data.ok){
-                    let elemento =document.getElementById("num_cart")
-                    elemento.innerHTML = data.numero
+                    let divsubtotal = document.getElementById('subtotal_' + id)
+                    divsubtotal.innerHTML =data.sub
+                    
+
+                    let total = 0.00
+                    let list =document.getElementsByName('subtotal[]')
+
+                    for(let i = 0; i< list.length; i++){
+                      total +=parseFloat(list[i].innerHTML.replace(/[$]/g, ''))
+                    }
+
+                    total =new Intl.NumberFormat('en-US',{
+                      minimumFractionDigits: 2
+                    }).format(total)
+
+                    document.getElementById('total').innerHTML = total
+                }
+            })
+        }
+        
+        function comprar(id) {
+          let url = 'actualizar_carro.php'
+    let formData = new FormData()
+    formData.append('action', 'comprar')
+    formData.append('id', id)
+
+    fetch (url, 
+        {
+            method: 'POST',
+            body: formData,
+            mode: 'cors'
+        }).then(response => response.json())
+        .then(data => {
+                if (data.ok) 
+                {
+                    location.reload()
                 }
             })
         }

@@ -1,5 +1,7 @@
 <?php 
 use SebastianBergmann\Environment\Console;
+
+require '../Modelos/config.php';
 class basemod
 {
     private $id_prod;
@@ -55,6 +57,7 @@ class basemod
     function delete1($id) {
         $query = "DELETE FROM productos WHERE id_producto = ".$id;
         $res = $this->db->Execute($query);
+        session_destroy();
     }
 
     function getAllProducts(){

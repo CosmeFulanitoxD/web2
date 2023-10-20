@@ -16,6 +16,8 @@ $sql->execute();
 $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 
+print_r($_SESSION);
+echo"dasdasd";
 
 
 
@@ -27,7 +29,11 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" href="./Assets/Styles/Style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="../Assets/Styles/FAQ.css">
+    <link rel="stylesheet" href="../Assets/Styles/Style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>Tienda</title>
 </head>
@@ -49,7 +55,13 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
               <a class="nav-link" href="../FAQ.html">About us</a>
             </li>
 
-            <a href="carro.php" class="btn btn-primary">
+            <li class="nav-item">
+              <a class="nav-link" href="./Views/Productos.php">Productos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./Views/tienda.php">Tienda</a>
+
+            <a href="checkout.php" class="btn btn-primary">
                 Carrito<span id="num_cart" class="badge bg-secondary"><?php echo $num_cart; ?></span>
             </a>
             
