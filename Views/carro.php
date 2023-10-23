@@ -11,6 +11,12 @@ if (isset($_POST['id'])) {
 
         if(isset($_SESSION['carrito']['productos'][$id])){
             $_SESSION['carrito']['productos'][$id] += 1;
+            $idas = $id;
+$conn=mysqli_connect("127.0.0.1","admone","123","tienda");
+
+$sql="CALL menos($idas,1);";
+$result=mysqli_query($conn,$sql);
+echo $result;
         }
         
         else {
