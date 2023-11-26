@@ -12,6 +12,10 @@ class basemod
     private $url;
     private $db;
 
+    private $usuario;
+    private $correo;
+    private $contraseña;
+
 
     public function __construct() {
         $con = new Conexion();
@@ -29,6 +33,41 @@ class basemod
         $record['url'] = $_POST['txturl'];
         $this->db->autoExecute($table,$record,'INSERT');
     }
+
+    function comprados(){
+        
+    }
+
+    function registro(){
+        $table = 'usuarios';
+        $record = array();
+        $record['correo'] = $_POST['txtemail'];
+        $checkmail = $_POST['txtemail'];
+        $record['username'] = $_POST['txtusuario'];
+        $record['contraseña'] = md5($_POST['txtpass']);
+        $record['id_rol'] = '2';
+        $query = "SELECT correo FROM usuarios where correo = '$checkmail';";
+        $rs = $this->db->Execute($query);
+        $ra = $rs->getRows();
+        if(empty($record['correo']) || empty($record['username']) || empty( $record['contraseña'])) {
+            echo '<script language="javascript">alert("Formulario vacio, ingrese datos en los campos requeridos");</script>';
+        }
+        elseif(!filter_var($record['correo'], FILTER_VALIDATE_EMAIL)) {
+            echo '<script language="javascript">alert("Correo no valido");</script>';
+        }
+        elseif (!empty($ra)) {
+            echo '<script language="javascript">alert("correo ya registrado");</script>';
+        }
+        
+        else {
+            $this->db->autoExecute($table,$record,'INSERT');# code...
+            echo '<script language="javascript">alert("Usuario inscrito correctamente");</script>';
+        }
+
+        
+    }
+
+
 
     function insertados2() {
         $table = 'carro';

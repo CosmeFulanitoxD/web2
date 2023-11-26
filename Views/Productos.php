@@ -1,6 +1,14 @@
 <?php 
 require '../Modelos/config.php';
-print_r($_SESSION);
+//print_r($_SESSION);
+
+if (!isset($_SESSION['rol'])) {
+    header('location: login1.php');
+}else {
+    if (($_SESSION['rol'] != 1)) {
+          header('location: login1.php');
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +72,7 @@ print_r($_SESSION);
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light ">
-        <a class="navbar-brand" href="./Indix.html"><h3 class="tituoloco">Camisetas el chido</h3></a>
+        <a class="navbar-brand" href="../Index.html"><h3 class="tituoloco">Camisetas el chido</h3></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

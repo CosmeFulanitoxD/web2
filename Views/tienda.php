@@ -4,7 +4,7 @@ require '../Modelos/config.php';
 $db = new Database();
 $con = $db->conectar();
 # $token_tmp = null;
-
+$identify = $_SESSION['rol'];
 
 $nombre = null;
 $cantidad = null;
@@ -14,12 +14,6 @@ $url = null;
 $sql = $con->prepare("SELECT id_producto, costo, nombre, url FROM productos");
 $sql->execute();
 $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-
-
-print_r($_SESSION);
-echo"dasdasd";
-
-
 
 ?>
 
@@ -34,7 +28,7 @@ echo"dasdasd";
     <link rel="stylesheet" href="../Assets/Styles/FAQ.css">
     <link rel="stylesheet" href="../Assets/Styles/Style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    
     <title>Tienda</title>
 </head>
 <body>
@@ -55,11 +49,18 @@ echo"dasdasd";
               <a class="nav-link" href="../FAQ.html">About us</a>
             </li>
 
+            <?php  if (($identify == 1)){
+                
+                ?>
+               <li class="nav-item">
+                 <a class="nav-link" href="./Views/Productos.php">Productos</a>
+               </li>
+                <?php } ?>
             <li class="nav-item">
-              <a class="nav-link" href="./Views/Productos.php">Productos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./Views/tienda.php">Tienda</a>
+              <a class="nav-link" href="./tienda.php">Tienda</a>
+
+              <li class="nav-item">
+              <a class="nav-link" href="./historial.php">Historial</a>
 
             <a href="checkout.php" class="btn btn-primary">
                 Carrito<span id="num_cart" class="badge bg-secondary"><?php echo $num_cart; ?></span>

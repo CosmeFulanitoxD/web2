@@ -4,9 +4,8 @@ require '../Modelos/config.php';
 require '../Modelos/conexion.php';
 $db = new Database();
 $con = $db->conectar();
-
 $producto = isset($_SESSION['carrito']['productos']) ? $_SESSION['carrito']['productos'] :null;
-print_r($_SESSION);
+//print_r($_SESSION['carrito']['productos']);
 $lista_carrito = array();
 # $producto = ($_POST['carro']['productos']);
 #print_r($_POST);
@@ -22,7 +21,7 @@ if($producto != null){
     
   }
 }
-
+//print_r($lista_carrito);
 
 
 ?>
@@ -123,54 +122,11 @@ if($producto != null){
          </div>
          <div class="row">
           <div col-md-5 offset-md-7 d-grid gap-2>
-            <button class="btn btn-primary btn-lg" onclick="comprar(<?php echo $id; ?>)">Realizar pago</button>
+            <button class="btn btn-primary btn-lg" onclick="comprarreal(<?php echo $id; ?>)">Realizar pago</button>
           </div>
          </div>
         </div>
 
-        <!-- empieza-->
-        <div class="prodcontainer">
-            <h3>Productos</h3>
-            <div id="resAJAX"></div>
-           
-            <form id="frmproducto" action="">
-            <input type="hidden" id="hddId" name="hddId">
-
-                    <div class="form-group">                      
-                    <label for="txtstock">stock</label>
-                    <input type="hidden" name="txtstock" id="txtstock">
-                </div>
-
-                <div class="form-group">                      
-                    <label for="txtnombre">nombre</label>
-                    <input type="hidden" name="txtnombre" id="txtnombre">
-                </div>
-
-                    <div class="form-group">                    
-                    <label for="txtreorden">reorden</label>
-                    <input type="hidden" name="txtreorden" id="txtreorden">
-                </div>
-
-                    <div class="form-group">   
-                    <label for="txtunidades_c">unidades</label>
-                    <input type="hidden" name="txtunidades_c" id="txtunidades_c">
-                </div>
-
-                    <div class="form-group">                       
-                    <label for="txtcosto">costo</label>
-                    <input type="hidden" name="txtcosto" id="txtcosto">
-                </div>
-
-                <div class="form-group">                       
-                    <label for="txturl">url</label>
-                    <input type="hidden" name="txturl" id="txturl">
-                </div>
-                </input>
-                
-            </form>
-
-            
-        </div>
 
       </main>
 
@@ -217,6 +173,25 @@ if($producto != null){
                 }
             })
 }
+
+        function comprarreal(id) {
+          let url = 'comprar.php'          
+          let formData = new FormData()
+          formData.append('id',id)
+          formData.append('action','compratotal')
+
+          fetch(url, {
+            method: 'POST',
+            body:formData,
+            mode: 'cors'
+          }).then(response => response.json())
+          .then(data=> {
+            if (data.ok) {
+              location.reload()
+            }
+          })
+        }
+
 
         function actualizacantidad(cantidad,id) {
             let url = './actualizar_carro.php'
@@ -271,6 +246,8 @@ if($producto != null){
                 }
             })
         }
+
+        
 
       </script>
 </body>

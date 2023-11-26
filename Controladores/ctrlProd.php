@@ -44,6 +44,11 @@ if (isset($_GET["opc"])) {
              
             break;
             
+        case 6:
+
+            $prodmod->registro();
+            //echo '<h5 class="miclasecss"><strong>Usuario registrado correctamente</strong></h5>';
+            break;
         
     }
 }
